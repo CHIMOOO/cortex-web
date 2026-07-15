@@ -10,22 +10,22 @@ const stats = [
 <section class="relative overflow-hidden py-8" aria-label="核心指标">
   <div class="mx-auto max-w-7xl px-4 sm:px-6">
     <div class="-skew-y-1 border border-border bg-card/50 chamfer">
-      <dl
+      <div
         class="grid skew-y-1 grid-cols-2 divide-border md:grid-cols-4 md:divide-x"
       >
         {
           stats.map((s) => (
             <div class="border-border px-6 py-6 [&:nth-child(n+3)]:border-t md:[&:nth-child(n+3)]:border-t-0">
-              <dd class="flex items-baseline gap-1 font-display text-4xl font-black text-accent text-glow-soft">
+              <div class="flex items-baseline gap-1 font-display text-4xl font-black text-accent text-glow-soft">
                 {s.value}
                 <span class="text-lg text-muted-fg">{s.unit}</span>
-              </dd>
-              <dt class="mt-1 text-sm font-semibold text-fg">{s.label}</dt>
-              <p class="mt-0.5 text-xs text-faint">{s.note}</p>
+              </div>
+              <div class="mt-1 text-sm font-semibold text-fg">{s.label}</div>
+              <p class="mt-0.5 text-xs text-muted-fg">{s.note}</p>
             </div>
           ))
         }
-      </dl>
+      </div>
     </div>
   </div>
 </section>

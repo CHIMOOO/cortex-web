@@ -90,12 +90,12 @@ const aux = [
                   </span>
                 </a>
               ) : (
+                // 未发布平台：纯信息状态卡（非交互控件，不用 button/role），
+                // 由「即将推出 / 构建排期中」文案传达状态，颜色达 AA。
                 <div
-                  role="button"
-                  aria-disabled="true"
-                  class="btn-disabled relative flex flex-col gap-3 border p-5 chamfer-sm grayscale"
+                  class="relative flex flex-col gap-3 border border-border bg-card/40 p-5 chamfer-sm"
                 >
-                  <span class="flex items-center justify-between">
+                  <span class="flex items-center justify-between text-muted-fg">
                     <Icon name={osIcon[e.os]} size={28} />
                     <span class="chamfer-sm border border-accent2/50 px-1.5 py-0.5 font-label text-[0.58rem] uppercase tracking-[0.15em] text-accent2">
                       Soon
@@ -104,10 +104,10 @@ const aux = [
                   <span class="font-display text-sm font-semibold uppercase tracking-wide text-muted-fg">
                     {e.label}
                   </span>
-                  <span class="font-label text-[0.65rem] uppercase tracking-[0.12em] text-faint">
+                  <span class="font-label text-[0.65rem] uppercase tracking-[0.12em] text-muted-fg">
                     ◌ Building... · 构建排期中
                   </span>
-                  <span class="font-body text-[0.65rem] text-faint">{e.platform}</span>
+                  <span class="font-body text-[0.65rem] text-muted-fg">{e.platform}</span>
                 </div>
               );
             })

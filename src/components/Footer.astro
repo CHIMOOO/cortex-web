@@ -2,11 +2,12 @@
 import { site } from "../config/site";
 import { downloads } from "../config/downloads";
 
+// 根相对：从 /404 等非首页也能正确跳回首页对应锚点。
 const nav = [
-  { href: "#skills", label: "功能" },
-  { href: "#pipeline", label: "运行机制" },
-  { href: "#download", label: "下载" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/#skills", label: "功能" },
+  { href: "/#pipeline", label: "运行机制" },
+  { href: "/#download", label: "下载" },
+  { href: "/#faq", label: "FAQ" },
 ];
 const resources = [
   { label: "管理端入口（内网）" },
@@ -77,7 +78,7 @@ const resources = [
         // Legal
       </div>
       <p class="mt-4 text-sm text-muted-fg">内部软件使用须知</p>
-      <p class="mt-3 text-xs leading-relaxed text-faint">
+      <p class="mt-3 text-xs leading-relaxed text-muted-fg">
         本站点及软件仅供组织内部使用，请勿对外传播安装包与访问地址。
       </p>
     </div>
@@ -86,7 +87,7 @@ const resources = [
   <!-- 终端签收行 -->
   <div class="border-t border-border">
     <div
-      class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-5 font-label text-xs text-faint sm:flex-row sm:items-center sm:justify-between sm:px-6"
+      class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-5 font-label text-xs text-muted-fg sm:flex-row sm:items-center sm:justify-between sm:px-6"
     >
       <span class="tracking-wider" aria-hidden="true"
         >&gt; session persisted — v{downloads.version}</span

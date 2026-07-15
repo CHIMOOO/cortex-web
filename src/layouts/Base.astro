@@ -43,7 +43,6 @@ const softwareLd = {
   "@type": "SoftwareApplication",
   "@id": absUrl("/") + "#app",
   name: site.name,
-  alternateName: "SkillsHub Desktop",
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Windows 10/11 (x64)",
   softwareVersion: downloads.version,
@@ -105,6 +104,7 @@ const graph = [softwareLd, ...jsonLd];
 
     <!-- 结构化数据 -->
     <script
+      is:inline
       type="application/ld+json"
       set:html={JSON.stringify(graph)}
     />

@@ -79,9 +79,8 @@ const term = [
         </div>
         <!-- 输出流 -->
         <div class="overflow-x-auto p-5 font-body text-xs leading-relaxed sm:text-sm">
-          <pre class="whitespace-pre"><code>{term.map((l) => (
-              <div>
-                <span class={l.p === "$" ? "text-accent2" : "text-accent"} aria-hidden="true">{l.p} </span><span class={
+          <pre><code>{term.map((l) => (
+              <span class="block"><span class={l.p === "$" ? "text-accent2" : "text-accent"} aria-hidden="true">{l.p} </span><span class={
                   l.c === "ok"
                     ? "text-fg"
                     : l.c === "cmd"
@@ -89,8 +88,7 @@ const term = [
                       : l.c === "cursor"
                         ? "text-muted-fg caret"
                         : "text-muted-fg"
-                }>{l.t}</span>
-              </div>
+                }>{l.t}</span></span>
             ))}</code></pre>
         </div>
       </div>

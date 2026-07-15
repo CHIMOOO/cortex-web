@@ -21,6 +21,8 @@
     "tailwindcss": "^4.1.0"
   },
   "devDependencies": {
-    "@napi-rs/canvas": "^0.1.60"
+    "@astrojs/check": "^0.9.9",
+    "@napi-rs/canvas": "^0.1.60",
+    "typescript": "^5.9.3"
   }
 }
