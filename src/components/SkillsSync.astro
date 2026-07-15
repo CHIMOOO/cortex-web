@@ -7,14 +7,14 @@ const points = [
 ];
 
 const term = [
-  { p: "$", t: "cortex sync", c: "cmd" },
-  { p: ">", t: "拉取部门订阅 [rd-platform] .......... OK", c: "ok" },
-  { p: ">", t: "清单比对：42 项 skills，3 项有更新", c: "" },
-  { p: ">", t: "写入 ~/.claude/skills ............... DONE", c: "ok" },
-  { p: ">", t: "写入 ~/.codex/skills ................ DONE", c: "ok" },
-  { p: ">", t: "写入 ~/.cursor/skills ............... DONE", c: "ok" },
+  { p: "$", t: "开始同步", c: "cmd" },
+  { p: ">", t: "拉取部门订阅 [rd-platform] …… 完成", c: "ok" },
+  { p: ">", t: "清单比对：42 项技能，3 项有更新", c: "" },
+  { p: ">", t: "写入 ~/.claude/skills …… 完成", c: "ok" },
+  { p: ">", t: "写入 ~/.codex/skills …… 完成", c: "ok" },
+  { p: ">", t: "写入 ~/.cursor/skills …… 完成", c: "ok" },
   { p: ">", t: "手写内容检测：0 处覆盖 ✓", c: "ok" },
-  { p: ">", t: "同步完成 (1.2s) — 下次轮询 30s 后", c: "cursor" },
+  { p: ">", t: "同步完成（1.2s）— 下次轮询 30s 后", c: "cursor" },
 ];
 ---
 
@@ -30,8 +30,8 @@ const term = [
   >
     <!-- 左 40% 文案 -->
     <div class="lg:col-span-2">
-      <span class="font-label text-xs uppercase tracking-[0.22em] text-accent"
-        >[ Core Module // 01 ]</span
+      <span class="font-label text-xs tracking-[0.18em] text-accent"
+        >核心模块 · 01</span
       >
       <h2
         id="skills-title"
@@ -73,8 +73,8 @@ const term = [
         <!-- 交通灯头 -->
         <div class="term-dots relative h-10 border-b border-border">
           <span
-            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-label text-[0.65rem] uppercase tracking-[0.2em] text-faint"
-            >cortex — sync</span
+            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-label text-[0.65rem] tracking-[0.15em] text-faint"
+            >cortex · 同步</span
           >
         </div>
         <!-- 输出流 -->

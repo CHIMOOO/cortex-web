@@ -331,41 +331,54 @@ summary:focus-visible,
   }
 }
 
-/* glitch 大标题：常驻色差 text-shadow + 低频抖动（Cyberpunk §5.1 强制） */
+/* 大标题：多色渐变填充 + 霓虹辉光 + 轻微闪动（可读，无重影）
+   —— 参考 designprompts.dev/cyberpunk 的 Transform 标题效果。
+   仅用于主标题（AIOT CORTEX / 404），不施于按钮/菜单/正文数据，避免难以辨读。 */
 .cyber-glitch {
-  position: relative;
-  text-shadow: -2px 0 var(--color-accent2), 2px 0 var(--color-accent3);
-  animation: glitch 7s infinite;
+  background-image: linear-gradient(
+    100deg,
+    #00ff88 0%,
+    #eaeaea 34%,
+    #ff3df0 60%,
+    #b06bff 78%,
+    #00d4ff 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5));
+  animation: titleFlow 9s linear infinite, titleFlicker 6s infinite;
 }
-@keyframes glitch {
+/* 渐变缓慢流过文字（“活着”的感觉） */
+@keyframes titleFlow {
+  to {
+    background-position: 220% center;
+  }
+}
+/* 霓虹灯般偶发闪动（轻，不刺眼） */
+@keyframes titleFlicker {
   0%,
-  90%,
+  46%,
+  54%,
+  91%,
+  93%,
   100% {
-    transform: translate(0);
-    text-shadow: -2px 0 var(--color-accent2), 2px 0 var(--color-accent3);
+    opacity: 1;
   }
-  91% {
-    transform: translate(-2px, 1px);
-    text-shadow: 2px 0 var(--color-accent2), -2px 0 var(--color-accent3);
+  50% {
+    opacity: 0.85;
   }
-  93% {
-    transform: translate(2px, -1px);
-    text-shadow: -3px 0 var(--color-accent2), 3px 0 var(--color-accent3);
-  }
-  95% {
-    transform: translate(-1px, -1px);
-    text-shadow: 2px 0 var(--color-accent2), -2px 0 var(--color-accent3);
-  }
-  97% {
-    transform: translate(1px, 1px);
-    text-shadow: -2px 0 var(--color-accent2), 2px 0 var(--color-accent3);
+  92% {
+    opacity: 0.72;
   }
 }
 .text-glow {
   filter: drop-shadow(0 0 12px rgba(0, 255, 136, 0.45));
 }
 .text-glow-soft {
-  text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.35);
 }
 
 /* 打字机（副标题终端行；文本在 DOM 内，仅动画显现，非 LCP 元素） */
@@ -407,7 +420,7 @@ summary:focus-visible,
     scroll-behavior: auto;
   }
   .cyber-glitch {
-    animation: none; /* 保留静态色差 text-shadow */
+    animation: none; /* 保留静态渐变填充 + 辉光，去掉流动/闪动 */
   }
   .scanbeam::before {
     animation: none;

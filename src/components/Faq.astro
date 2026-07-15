@@ -10,9 +10,7 @@ import Icon from "./Icon.astro";
 >
   <div class="mx-auto max-w-3xl px-4 sm:px-6">
     <div class="text-center">
-      <span class="font-label text-xs uppercase tracking-[0.22em] text-accent"
-        >[ FAQ ]</span
-      >
+      <span class="font-label text-xs tracking-[0.18em] text-accent">问答</span>
       <h2
         id="faq-title"
         class="mt-4 font-display text-4xl font-bold tracking-wide text-fg md:text-5xl"
@@ -29,7 +27,7 @@ import Icon from "./Icon.astro";
               class="flex cursor-pointer list-none items-center gap-3 px-5 py-4 pt-6 font-body text-base text-fg transition hover:text-accent"
             >
               <span class="font-body font-semibold text-accent" aria-hidden="true">
-                Q&gt;
+                问&gt;
               </span>
               <span class="flex-1">{it.q}</span>
               <span class="text-muted-fg transition group-open:rotate-180 group-open:text-accent">
@@ -38,7 +36,7 @@ import Icon from "./Icon.astro";
             </summary>
             <div class="flex gap-3 border-t border-border px-5 py-4 text-sm leading-relaxed text-muted-fg">
               <span class="font-body font-semibold text-accent3" aria-hidden="true">
-                A&gt;
+                答&gt;
               </span>
               <p class="flex-1">{it.a}</p>
             </div>
