@@ -1,0 +1,120 @@
+---
+// 站点外壳：<html lang> + 全套 SEO head + JSON-LD + 全页扫描线层。
+// 自托管字体（拉丁子集，零外部 CDN）在此一次性引入。
+import "@fontsource/orbitron/700.css";
+import "@fontsource/orbitron/900.css";
+import "@fontsource/share-tech-mono/400.css";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/700.css";
+// 首屏 LCP 关键字体（Hero 大标题）预加载，消除标题字体闪换
+import orbitron900 from "@fontsource/orbitron/files/orbitron-latin-900-normal.woff2?url";
+import "../styles/global.css";
+
+import { site, absUrl } from "../config/site";
+import { downloads, primaryDownload } from "../config/downloads";
+
+interface Props {
+  /** 页面标题；缺省用站点默认 */
+  title?: string;
+  /** 页面描述；缺省用站点默认 */
+  description?: string;
+  /** 当前路径（canonical / og:url），如 "/" 或 "/404" */
+  path?: string;
+  /** 额外的 JSON-LD 节点（如 FAQPage），与全局 SoftwareApplication 合并 */
+  jsonLd?: Record<string, unknown>[];
+  /** 是否可被搜索引擎收录（404 等页设 false） */
+  noindex?: boolean;
+}
+
+const {
+  title = `${site.name} — ${site.tagline} | Skills 一键同步`,
+  description = site.description,
+  path = "/",
+  jsonLd = [],
+  noindex = false,
+} = Astro.props;
+
+const canonical = absUrl(path);
+const ogImage = absUrl("/og-cover.png");
+
+// 全局结构化数据：SoftwareApplication（不含 Organization —— 不暴露公司名）
+const softwareLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": absUrl("/") + "#app",
+  name: site.name,
+  alternateName: "SkillsHub Desktop",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "Windows 10/11 (x64)",
+  softwareVersion: downloads.version,
+  description: site.description,
+  downloadUrl: primaryDownload.url,
+  installUrl: primaryDownload.url,
+  screenshot: ogImage,
+  isAccessibleForFree: true,
+  offers: { "@type": "Offer", price: "0", priceCurrency: "CNY" },
+  inLanguage: site.locale,
+};
+const graph = [softwareLd, ...jsonLd];
+---
+
+<!doctype html>
+<html lang={site.locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content={site.themeColor} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={site.keywords.join(",")} />
+    {noindex && <meta name="robots" content="noindex,follow" />}
+    <link rel="canonical" href={canonical} />
+
+    <!-- 图标（源自客户端同款品牌图标） -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- 关键字体预加载 -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href={orbitron900}
+      crossorigin
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={site.shortDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={site.ogLocale} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={site.shortDescription} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- 结构化数据 -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(graph)}
+    />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+  <body class="scanlines">
+    <!-- 移动的扫描束（reduced-motion 下隐藏） -->
+    <div class="scanbeam" aria-hidden="true"></div>
+
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,18 @@
+# build output
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# 安装包二进制：同域分发形态下发布时丢进 public/downloads/，但不进 git
+public/downloads/*
+!public/downloads/.gitkeep
+
+# env / logs / os
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db

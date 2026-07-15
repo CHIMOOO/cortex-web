@@ -1,0 +1,431 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Cyberpunk / Glitch 设计令牌（DNA）—— 见 Cyberpunk.md §2
+   Tailwind 4 CSS-first：@theme 里的 --color-* / --font-* / --shadow-* 自动生成
+   对应工具类（bg-accent / text-accent / border-border / font-display / shadow-neon …）
+   ═══════════════════════════════════════════════════════════════════════════ */
+@theme {
+  /* 颜色 */
+  --color-bg: #0a0a0f; /* 深空黑（略带蓝） */
+  --color-fg: #e0e0e0; /* 主文本，非纯白 */
+  --color-card: #12121a; /* 卡片底 */
+  --color-muted: #1c1c2e; /* 抬升的 UI chrome */
+  --color-muted-fg: #8a91a3; /* 次要文本（AA 校正，≈5.5:1，见 Cyberpunk §9） */
+  --color-faint: #6b7280; /* 仅用于 ≥24px 大字 / 纯装饰 label（原设计系统 mutedForeground） */
+  --color-accent: #00ff88; /* 主霓虹：电光绿 */
+  --color-accent2: #ff00ff; /* 次霓虹：品红 */
+  --color-accent3: #00d4ff; /* 三级霓虹：青 */
+  --color-border: #2a2a3a; /* 细边框 */
+  --color-danger: #ff3366; /* 错误/危险 */
+
+  /* 字体族（拉丁自托管 + CJK 系统栈回退；拉丁三族均无 CJK 字形，中文自动回退） */
+  --font-display: "Orbitron", "Share Tech Mono", "PingFang SC", "Microsoft YaHei",
+    "Noto Sans SC", sans-serif;
+  --font-body: "JetBrains Mono", "Fira Code", Consolas, "PingFang SC",
+    "Microsoft YaHei", monospace;
+  --font-label: "Share Tech Mono", "PingFang SC", "Microsoft YaHei", monospace;
+
+  /* 霓虹辉光（多层 box-shadow，真发光） */
+  --shadow-neon-sm: 0 0 3px #00ff88, 0 0 6px #00ff8830;
+  --shadow-neon: 0 0 5px #00ff88, 0 0 10px #00ff8840;
+  --shadow-neon-lg: 0 0 10px #00ff88, 0 0 20px #00ff8860, 0 0 40px #00ff8830;
+  --shadow-neon-secondary: 0 0 5px #ff00ff, 0 0 20px #ff00ff60;
+  --shadow-neon-tertiary: 0 0 5px #00d4ff, 0 0 20px #00d4ff60;
+}
+
+/* ───────────────────────── 基础 ───────────────────────── */
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* sticky nav 锚点偏移 */
+}
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+  letter-spacing: 0.01em;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* skew/rotate 区块防横向滚动条 */
+}
+::selection {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+/* 霓虹风滚动条 */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border: 2px solid var(--color-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* 键盘焦点：霓虹描边（Cyberpunk §9） */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  box-shadow: var(--shadow-neon-sm);
+}
+
+/* 无障碍隐藏（把中文定位词喂给爬虫/读屏，视觉不显示） */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ───────────────────────── 纹理：扫描线 / 网格 ───────────────────────── */
+/* 全页 CRT 扫描线覆盖层（挂 body.scanlines） */
+.scanlines::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.28) 2px,
+    rgba(0, 0, 0, 0.28) 4px
+  );
+}
+/* 缓慢下移的高亮扫描束 */
+.scanbeam {
+  position: fixed;
+  inset: 0;
+  z-index: 89;
+  pointer-events: none;
+  overflow: hidden;
+}
+.scanbeam::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 45vh;
+  top: -45vh;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 255, 136, 0.045),
+    transparent
+  );
+  animation: scanbeam 9s linear infinite;
+}
+@keyframes scanbeam {
+  to {
+    transform: translateY(150vh);
+  }
+}
+
+/* PCB / 数据高速路网格背景 */
+.grid-bg {
+  background-image: linear-gradient(rgba(0, 255, 136, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.035) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+.grid-bg-strong {
+  background-image: linear-gradient(rgba(0, 255, 136, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.07) 1px, transparent 1px);
+  background-size: 46px 46px;
+}
+/* 角落霓虹雾（不对称光源） */
+.mesh {
+  background-image: radial-gradient(
+      60% 50% at 8% 0%,
+      rgba(0, 255, 136, 0.12),
+      transparent 70%
+    ),
+    radial-gradient(50% 50% at 100% 20%, rgba(255, 0, 255, 0.1), transparent 70%),
+    radial-gradient(60% 60% at 90% 100%, rgba(0, 212, 255, 0.08), transparent 70%);
+}
+
+/* ───────────────────────── 切角（chamfer）───────────────────────── */
+.chamfer {
+  clip-path: polygon(
+    0 12px,
+    12px 0,
+    calc(100% - 12px) 0,
+    100% 12px,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    12px 100%,
+    0 calc(100% - 12px)
+  );
+}
+.chamfer-sm {
+  clip-path: polygon(
+    0 6px,
+    6px 0,
+    calc(100% - 6px) 0,
+    100% 6px,
+    100% calc(100% - 6px),
+    calc(100% - 6px) 100%,
+    6px 100%,
+    0 calc(100% - 6px)
+  );
+}
+.chamfer-lg {
+  clip-path: polygon(
+    0 20px,
+    20px 0,
+    calc(100% - 20px) 0,
+    100% 20px,
+    100% calc(100% - 20px),
+    calc(100% - 20px) 100%,
+    20px 100%,
+    0 calc(100% - 20px)
+  );
+}
+
+/* ───────────────────────── 组件基元 ───────────────────────── */
+/* 默认卡片 */
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s, box-shadow 0.3s;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-neon);
+}
+/* 全息卡（毛玻璃 + 霓虹边 + 四角） */
+.holo {
+  position: relative;
+  background: color-mix(in srgb, var(--color-muted) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+  box-shadow: var(--shadow-neon);
+  backdrop-filter: blur(8px);
+}
+.holo-corner::before,
+.holo-corner::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--color-accent);
+  pointer-events: none;
+}
+.holo-corner::before {
+  top: 6px;
+  left: 6px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.holo-corner::after {
+  bottom: 6px;
+  right: 6px;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* 终端窗头（红黄绿交通灯） */
+.term-dots::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  left: 14px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff5f56;
+  box-shadow: 18px 0 0 #ffbd2e, 36px 0 0 #27c93f;
+}
+
+/* 按钮基座 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.8rem;
+  padding: 0.85rem 1.6rem;
+  min-height: 44px; /* 触达 */
+  border: 2px solid var(--color-accent);
+  color: var(--color-accent);
+  background: transparent;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+.btn:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  box-shadow: var(--shadow-neon);
+}
+.btn-solid {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border-color: var(--color-accent);
+}
+.btn-solid:hover {
+  filter: brightness(1.12);
+  box-shadow: var(--shadow-neon-lg);
+}
+.btn-outline {
+  border: 1px solid var(--color-border);
+  color: var(--color-fg);
+}
+.btn-outline:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: transparent;
+  box-shadow: var(--shadow-neon-sm);
+}
+.btn-disabled {
+  border: 1px solid var(--color-border);
+  color: var(--color-faint);
+  background: transparent;
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* 标签胶囊（label / 徽标） */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.7rem;
+  color: var(--color-accent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+  padding: 0.25rem 0.7rem;
+}
+
+/* ───────────────────────── 动效 ───────────────────────── */
+/* 闪烁光标（追加在末尾） */
+.caret::after {
+  content: "▍";
+  color: var(--color-accent);
+  animation: blink 1s step-end infinite;
+  margin-left: 0.1em;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* glitch 大标题：常驻色差 text-shadow + 低频抖动（Cyberpunk §5.1 强制） */
+.cyber-glitch {
+  position: relative;
+  text-shadow: -2px 0 var(--color-accent2), 2px 0 var(--color-accent3);
+  animation: glitch 7s infinite;
+}
+@keyframes glitch {
+  0%,
+  90%,
+  100% {
+    transform: translate(0);
+    text-shadow: -2px 0 var(--color-accent2), 2px 0 var(--color-accent3);
+  }
+  91% {
+    transform: translate(-2px, 1px);
+    text-shadow: 2px 0 var(--color-accent2), -2px 0 var(--color-accent3);
+  }
+  93% {
+    transform: translate(2px, -1px);
+    text-shadow: -3px 0 var(--color-accent2), 3px 0 var(--color-accent3);
+  }
+  95% {
+    transform: translate(-1px, -1px);
+    text-shadow: 2px 0 var(--color-accent2), -2px 0 var(--color-accent3);
+  }
+  97% {
+    transform: translate(1px, 1px);
+    text-shadow: -2px 0 var(--color-accent2), 2px 0 var(--color-accent3);
+  }
+}
+.text-glow {
+  filter: drop-shadow(0 0 12px rgba(0, 255, 136, 0.45));
+}
+.text-glow-soft {
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+}
+
+/* 打字机（副标题终端行；文本在 DOM 内，仅动画显现，非 LCP 元素） */
+.typing {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 0.55em solid var(--color-accent);
+  width: 0;
+  animation: typing 3.4s steps(46, end) forwards,
+    caretblink 0.9s step-end infinite;
+}
+@keyframes typing {
+  to {
+    width: 100%;
+  }
+}
+@keyframes caretblink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+/* 发光虚线（运行机制连接线） */
+.dash-flow {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-accent) 0,
+    var(--color-accent) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+}
+
+/* ───────────────────────── 降级：prefers-reduced-motion（Cyberpunk §9 强制）── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .cyber-glitch {
+    animation: none; /* 保留静态色差 text-shadow */
+  }
+  .scanbeam::before {
+    animation: none;
+    display: none;
+  }
+  .caret::after,
+  .typing {
+    animation: none;
+  }
+  .typing {
+    width: 100%;
+    border-right-color: transparent;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
