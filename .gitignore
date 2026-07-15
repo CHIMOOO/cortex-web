@@ -9,7 +9,9 @@ node_modules/
 public/downloads/*
 !public/downloads/.gitkeep
 
-# env / logs / os
+# editor / env / logs / os
+.vscode/
+.idea/
 .env
 .env.*
 !.env.example

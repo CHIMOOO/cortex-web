@@ -91,51 +91,9 @@ summary:focus-visible,
   border: 0;
 }
 
-/* ───────────────────────── 纹理：扫描线 / 网格 ───────────────────────── */
-/* 全页 CRT 扫描线覆盖层（挂 body.scanlines） */
-.scanlines::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.28) 2px,
-    rgba(0, 0, 0, 0.28) 4px
-  );
-}
-/* 缓慢下移的高亮扫描束 */
-.scanbeam {
-  position: fixed;
-  inset: 0;
-  z-index: 89;
-  pointer-events: none;
-  overflow: hidden;
-}
-.scanbeam::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 45vh;
-  top: -45vh;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    rgba(0, 255, 136, 0.045),
-    transparent
-  );
-  animation: scanbeam 9s linear infinite;
-}
-@keyframes scanbeam {
-  to {
-    transform: translateY(150vh);
-  }
-}
-
+/* ───────────────────────── 纹理：网格 ─────────────────────────
+   注：全页横向扫描线覆盖层与移动扫描束已按反馈移除——它们会在每段文字上蒙一层
+   横条，影响可读性。纹理保留在网格背景与霓虹上。 */
 /* PCB / 数据高速路网格背景 */
 .grid-bg {
   background-image: linear-gradient(rgba(0, 255, 136, 0.035) 1px, transparent 1px),
@@ -421,10 +379,6 @@ summary:focus-visible,
   }
   .cyber-glitch {
     animation: none; /* 保留静态渐变填充 + 辉光，去掉流动/闪动 */
-  }
-  .scanbeam::before {
-    animation: none;
-    display: none;
   }
   .caret::after,
   .typing {
