@@ -1,0 +1,31 @@
+---
+const stats = [
+  { value: "3", unit: "个", label: "目标工具目录", note: "Claude Code / Codex / Cursor" },
+  { value: "30", unit: "s", label: "推送轮询间隔", note: "内容与新版本第一时间感知" },
+  { value: "0", unit: "次", label: "手动拷贝", note: "安装后全程自动" },
+  { value: "1", unit: "处", label: "集中管控", note: "管理端统一发布与开关" },
+];
+---
+
+<section class="relative overflow-hidden py-8" aria-label="核心指标">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="-skew-y-1 border border-border bg-card/50 chamfer">
+      <dl
+        class="grid skew-y-1 grid-cols-2 divide-border md:grid-cols-4 md:divide-x"
+      >
+        {
+          stats.map((s) => (
+            <div class="border-border px-6 py-6 [&:nth-child(n+3)]:border-t md:[&:nth-child(n+3)]:border-t-0">
+              <dd class="flex items-baseline gap-1 font-display text-4xl font-black text-accent text-glow-soft">
+                {s.value}
+                <span class="text-lg text-muted-fg">{s.unit}</span>
+              </dd>
+              <dt class="mt-1 text-sm font-semibold text-fg">{s.label}</dt>
+              <p class="mt-0.5 text-xs text-faint">{s.note}</p>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,37 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Base
+  path="/404"
+  title="ERR_404 // 信号丢失 — AIoT Cortex"
+  description="页面未找到。"
+  noindex
+>
+  <Nav />
+  <main
+    class="relative flex min-h-[70vh] items-center justify-center overflow-hidden px-4 grid-bg-strong"
+  >
+    <div class="pointer-events-none absolute inset-0 mesh" aria-hidden="true"></div>
+    <div class="relative text-center">
+      <p class="font-label text-sm uppercase tracking-[0.3em] text-accent2">
+        [ Signal Lost ]
+      </p>
+      <h1
+        class="mt-4 font-display text-7xl font-black text-accent text-glow cyber-glitch md:text-9xl"
+        data-text="ERR_404"
+      >
+        ERR_404
+      </h1>
+      <p class="mt-6 font-body text-base text-muted-fg">
+        <span class="text-accent" aria-hidden="true">&gt;</span> 目标节点不存在或已下线。
+      </p>
+      <a href="/" class="btn btn-outline chamfer mt-8">
+        返回主界面
+      </a>
+    </div>
+  </main>
+  <Footer />
+</Base>

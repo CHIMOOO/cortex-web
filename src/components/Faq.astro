@@ -1,0 +1,50 @@
+---
+import { faqItems } from "../config/faq";
+import Icon from "./Icon.astro";
+---
+
+<section
+  id="faq"
+  class="scroll-mt-20 py-24"
+  aria-labelledby="faq-title"
+>
+  <div class="mx-auto max-w-3xl px-4 sm:px-6">
+    <div class="text-center">
+      <span class="font-label text-xs uppercase tracking-[0.22em] text-accent"
+        >[ FAQ ]</span
+      >
+      <h2
+        id="faq-title"
+        class="mt-4 font-display text-4xl font-bold tracking-wide text-fg md:text-5xl"
+      >
+        常见问题
+      </h2>
+    </div>
+
+    <div class="mt-12 space-y-4">
+      {
+        faqItems.map((it) => (
+          <details class="group relative border border-border bg-card chamfer">
+            <summary
+              class="flex cursor-pointer list-none items-center gap-3 px-5 py-4 pt-6 font-body text-base text-fg transition hover:text-accent"
+            >
+              <span class="font-body font-semibold text-accent" aria-hidden="true">
+                Q&gt;
+              </span>
+              <span class="flex-1">{it.q}</span>
+              <span class="text-muted-fg transition group-open:rotate-180 group-open:text-accent">
+                <Icon name="chevron-down" size={18} />
+              </span>
+            </summary>
+            <div class="flex gap-3 border-t border-border px-5 py-4 text-sm leading-relaxed text-muted-fg">
+              <span class="font-body font-semibold text-accent3" aria-hidden="true">
+                A&gt;
+              </span>
+              <p class="flex-1">{it.a}</p>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

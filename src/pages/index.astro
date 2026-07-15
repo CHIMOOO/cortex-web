@@ -1,11 +1,27 @@
 ---
 import Base from "../layouts/Base.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import StatsStrip from "../components/StatsStrip.astro";
+import SkillsSync from "../components/SkillsSync.astro";
+import FeatureGrid from "../components/FeatureGrid.astro";
+import Pipeline from "../components/Pipeline.astro";
+import DownloadPanel from "../components/DownloadPanel.astro";
+import Faq from "../components/Faq.astro";
+import Footer from "../components/Footer.astro";
+import { faqJsonLd } from "../config/faq";
 ---
 
-<Base path="/">
+<Base path="/" jsonLd={[faqJsonLd()]}>
+  <Nav />
   <main>
-    <h1 class="font-display text-6xl text-accent cyber-glitch" data-text="AIOT CORTEX">
-      AIOT CORTEX
-    </h1>
+    <Hero />
+    <StatsStrip />
+    <SkillsSync />
+    <FeatureGrid />
+    <Pipeline />
+    <DownloadPanel />
+    <Faq />
   </main>
+  <Footer />
 </Base>

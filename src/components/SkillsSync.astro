@@ -1,0 +1,99 @@
+---
+// 核心功能区 + 强制终端区。负边距上叠 Stats（重叠元素），40/60 反向不对称。
+const points = [
+  { k: "一键 / 自动双模式", v: "手动触发或后台静默同步，随团队习惯" },
+  { k: "受管写入隔离", v: "只更新平台托管的块，手写内容 0 覆盖" },
+  { k: "三大工具一次覆盖", v: "~/.claude、~/.codex、~/.cursor 同步落盘" },
+];
+
+const term = [
+  { p: "$", t: "cortex sync", c: "cmd" },
+  { p: ">", t: "拉取部门订阅 [rd-platform] .......... OK", c: "ok" },
+  { p: ">", t: "清单比对：42 项 skills，3 项有更新", c: "" },
+  { p: ">", t: "写入 ~/.claude/skills ............... DONE", c: "ok" },
+  { p: ">", t: "写入 ~/.codex/skills ................ DONE", c: "ok" },
+  { p: ">", t: "写入 ~/.cursor/skills ............... DONE", c: "ok" },
+  { p: ">", t: "手写内容检测：0 处覆盖 ✓", c: "ok" },
+  { p: ">", t: "同步完成 (1.2s) — 下次轮询 30s 后", c: "cursor" },
+];
+---
+
+<section
+  id="skills"
+  class="relative -mt-8 scroll-mt-20 overflow-hidden py-20 grid-bg-strong lg:py-28"
+  aria-labelledby="skills-title"
+>
+  <div class="pointer-events-none absolute inset-0 mesh" aria-hidden="true"></div>
+
+  <div
+    class="relative mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-5"
+  >
+    <!-- 左 40% 文案 -->
+    <div class="lg:col-span-2">
+      <span class="font-label text-xs uppercase tracking-[0.22em] text-accent"
+        >[ Core Module // 01 ]</span
+      >
+      <h2
+        id="skills-title"
+        class="mt-4 font-display text-4xl font-bold tracking-wide text-fg md:text-5xl"
+      >
+        <span class="text-accent text-glow-soft">SKILLS</span> 同步
+      </h2>
+      <p class="mt-2 text-lg text-muted-fg">团队技能库，直达每台开发机</p>
+
+      <p class="mt-5 text-base leading-relaxed text-muted-fg">
+        管理端集中维护团队 Skills 技能库；客户端按部门订阅，一键或自动同步到本机 AI
+        编程工具目录——Claude Code（<code class="text-accent3">~/.claude</code>）、Codex（<code
+          class="text-accent3">~/.codex</code
+        >）、Cursor（<code class="text-accent3">~/.cursor</code>）。采用受管块写入，你手写的本地内容永远不会被覆盖。
+      </p>
+
+      <ul class="mt-6 space-y-3">
+        {
+          points.map((pt) => (
+            <li class="flex gap-3">
+              <span class="mt-0.5 font-body text-accent" aria-hidden="true">
+                &gt;
+              </span>
+              <span>
+                <span class="font-semibold text-fg">{pt.k}</span>
+                <span class="text-muted-fg">——{pt.v}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- 右 60% 终端卡 -->
+    <div class="lg:col-span-3">
+      <div
+        class="relative border border-border bg-bg chamfer [box-shadow:var(--shadow-neon-sm)]"
+      >
+        <!-- 交通灯头 -->
+        <div class="term-dots relative h-10 border-b border-border">
+          <span
+            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-label text-[0.65rem] uppercase tracking-[0.2em] text-faint"
+            >cortex — sync</span
+          >
+        </div>
+        <!-- 输出流 -->
+        <div class="overflow-x-auto p-5 font-body text-xs leading-relaxed sm:text-sm">
+          <pre class="whitespace-pre"><code>{term.map((l) => (
+              <div>
+                <span class={l.p === "$" ? "text-accent2" : "text-accent"} aria-hidden="true">{l.p} </span><span class={
+                  l.c === "ok"
+                    ? "text-fg"
+                    : l.c === "cmd"
+                      ? "text-fg"
+                      : l.c === "cursor"
+                        ? "text-muted-fg caret"
+                        : "text-muted-fg"
+                }>{l.t}</span>
+              </div>
+            ))}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

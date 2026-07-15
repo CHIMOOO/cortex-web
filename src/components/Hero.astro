@@ -1,0 +1,118 @@
+---
+import { site } from "../config/site";
+import { downloads, primaryDownload } from "../config/downloads";
+import Icon from "./Icon.astro";
+---
+
+<section
+  id="top"
+  class="relative overflow-hidden border-b border-border grid-bg"
+  aria-labelledby="hero-title"
+>
+  <!-- 角落霓虹雾（不对称光源） -->
+  <div class="pointer-events-none absolute inset-0 mesh" aria-hidden="true"></div>
+
+  <div
+    class="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-24 sm:px-6 lg:grid-cols-5 lg:py-32"
+  >
+    <!-- 左 60% -->
+    <div class="lg:col-span-3">
+      <span class="chip chamfer-sm" aria-hidden="true">// Internal Platform</span>
+
+      <h1
+        id="hero-title"
+        class="mt-6 font-display text-5xl font-black leading-[0.95] tracking-tight text-accent text-glow cyber-glitch md:text-7xl lg:text-8xl"
+        data-text={site.wordmark}
+      >
+        {site.wordmark}<span class="sr-only"> — 企业内部软件载体平台，Skills 一键同步</span>
+      </h1>
+
+      <p
+        class="mt-5 font-display text-2xl font-bold tracking-[0.06em] text-fg text-glow-soft md:text-3xl"
+      >
+        {site.tagline}
+      </p>
+
+      <p class="mt-5 max-w-xl text-base leading-relaxed text-muted-fg">
+        一次安装，持续在线。AIoT Cortex 是组织内部的桌面软件载体与分发平台，把团队沉淀的
+        AI 技能库（Skills）自动送达每位成员的本地开发环境——无需手动拷贝，无需相互提醒。
+      </p>
+
+      <!-- 终端 typewriter 行 -->
+      <div
+        class="mt-6 max-w-xl overflow-hidden border border-border bg-card/60 px-4 py-3 chamfer-sm"
+      >
+        <code class="font-body text-xs text-accent sm:text-sm">
+          <span class="text-faint" aria-hidden="true">$</span>
+          <span class="typing"
+            >cortex sync --skills --target=claude,codex,cursor</span
+          >
+        </code>
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <a
+          href={primaryDownload.url}
+          class="btn btn-solid chamfer"
+          data-text="下载 Windows 客户端"
+        >
+          <Icon name="download" size={18} />
+          下载 Windows 客户端
+        </a>
+        <a href="#pipeline" class="btn btn-outline chamfer">
+          查看运行机制
+          <Icon name="arrow-right" size={16} />
+        </a>
+      </div>
+
+      <p class="mt-4 font-label text-xs uppercase tracking-[0.15em] text-faint">
+        仅面向组织内部成员 · 当前版本 v{downloads.version}
+      </p>
+    </div>
+
+    <!-- 右 40%：HUD 同步监视器（lg 以下隐藏） -->
+    <div class="hidden lg:col-span-2 lg:block">
+      <div class="holo holo-corner chamfer p-6" aria-hidden="true">
+        <div
+          class="flex items-center justify-between border-b border-accent/20 pb-3 font-label text-xs uppercase tracking-[0.2em] text-accent"
+        >
+          <span>[ Sync Monitor ]</span>
+          <span class="flex items-center gap-1.5 text-accent">
+            <span class="inline-block h-2 w-2 rounded-full bg-accent [box-shadow:0_0_6px_#00ff88]"></span>
+            Online
+          </span>
+        </div>
+
+        <dl class="mt-4 space-y-3 font-body text-sm">
+          <div class="flex items-center justify-between">
+            <dt class="text-faint">NAMESPACE</dt>
+            <dd class="text-fg">rd-platform</dd>
+          </div>
+          <div class="flex items-center justify-between">
+            <dt class="text-faint">SKILLS SYNCED</dt>
+            <dd class="text-accent3">42</dd>
+          </div>
+          <div class="flex items-center justify-between">
+            <dt class="text-faint">TARGETS</dt>
+            <dd class="text-fg">claude / codex / cursor</dd>
+          </div>
+          <div class="flex items-center justify-between">
+            <dt class="text-faint">NEXT POLL</dt>
+            <dd class="text-fg">00:00:27</dd>
+          </div>
+        </dl>
+
+        <div
+          class="mt-5 border-t border-accent/20 pt-3 font-body text-xs text-muted-fg"
+        >
+          <span class="text-accent">&gt;</span> recv: skills.manifest.json ...
+          <span class="text-accent">OK</span>
+        </div>
+        <p class="mt-2 font-label text-[0.6rem] uppercase tracking-widest text-faint">
+          * 示意数据
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

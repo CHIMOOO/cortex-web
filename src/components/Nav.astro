@@ -1,0 +1,59 @@
+---
+import { site } from "../config/site";
+import Icon from "./Icon.astro";
+
+const links = [
+  { href: "#skills", label: "功能" },
+  { href: "#pipeline", label: "运行机制" },
+  { href: "#download", label: "下载" },
+  { href: "#faq", label: "FAQ" },
+];
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-border bg-bg/80 backdrop-blur-md"
+>
+  <nav
+    class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6"
+    aria-label="主导航"
+  >
+    <!-- 品牌 -->
+    <a href="#top" class="flex items-center gap-2.5" aria-label={`${site.name} 首页`}>
+      <span class="font-label text-sm text-accent" aria-hidden="true">&gt;_</span>
+      <span
+        class="font-display text-lg font-bold tracking-widest text-fg caret"
+        >{site.wordmark}</span
+      >
+      <span
+        class="chamfer-sm hidden border border-accent2/60 px-2 py-0.5 font-label text-[0.62rem] uppercase tracking-[0.2em] text-accent2 sm:inline"
+        aria-hidden="true">[ Internal ]</span
+      >
+    </a>
+
+    <!-- 锚点链接 -->
+    <ul class="hidden items-center gap-7 lg:flex">
+      {
+        links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              class="font-label text-xs uppercase tracking-[0.2em] text-muted-fg transition hover:text-accent hover:[filter:drop-shadow(0_0_6px_currentColor)]"
+            >
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <!-- 下载 CTA -->
+    <a
+      href="#download"
+      class="btn btn-outline chamfer-sm !px-4 !py-2 !text-xs"
+    >
+      <Icon name="download" size={16} />
+      <span class="hidden sm:inline">下载客户端</span>
+      <span class="sm:hidden">下载</span>
+    </a>
+  </nav>
+</header>

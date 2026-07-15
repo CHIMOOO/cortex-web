@@ -1,0 +1,80 @@
+---
+import Icon from "./Icon.astro";
+
+const steps = [
+  {
+    no: "01",
+    icon: "upload",
+    title: "发布",
+    desc: "管理员在管理端上传或更新 Skills，按部门指定可见范围。",
+  },
+  {
+    no: "02",
+    icon: "rss",
+    title: "推送",
+    desc: "客户端 30 秒轮询感知变更，托盘弹出更新通知——或后台直接静默同步。",
+  },
+  {
+    no: "03",
+    icon: "hard-drive",
+    title: "落盘",
+    desc: "技能文件写入本机 Claude Code / Codex / Cursor 目录，受管块隔离，手写内容零覆盖。",
+  },
+];
+---
+
+<section
+  id="pipeline"
+  class="scroll-mt-20 overflow-hidden py-24"
+  aria-labelledby="pipeline-title"
+>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="mx-auto max-w-2xl text-center">
+      <span class="font-label text-xs uppercase tracking-[0.22em] text-accent"
+        >[ Pipeline ]</span
+      >
+      <h2
+        id="pipeline-title"
+        class="mt-4 font-display text-4xl font-bold tracking-wide text-fg md:text-5xl"
+      >
+        运行机制
+      </h2>
+      <p class="mt-2 text-lg text-muted-fg">从管理端发布到本机落盘，只有三步</p>
+    </div>
+
+    <div class="relative mt-16 rotate-[-0.5deg]">
+      <!-- 贯穿三卡的发光虚线（桌面横向） -->
+      <div
+        class="pointer-events-none absolute left-0 right-0 top-[3.25rem] hidden h-px dash-flow md:block"
+        aria-hidden="true"
+      >
+      </div>
+
+      <ol class="grid gap-8 md:grid-cols-3">
+        {
+          steps.map((s) => (
+            <li class="holo holo-corner chamfer relative p-6 text-center">
+              <div class="flex justify-center">
+                <span class="font-display text-5xl font-black text-transparent [-webkit-text-stroke:1.5px_var(--color-accent)] [text-shadow:0_0_14px_rgba(0,255,136,0.4)]">
+                  {s.no}
+                </span>
+              </div>
+              <div class="mt-4 flex justify-center text-accent">
+                <Icon name={s.icon} size={26} />
+              </div>
+              <h3 class="mt-3 font-display text-xl font-semibold uppercase tracking-wide text-fg">
+                {s.title}
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted-fg">{s.desc}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <p class="mt-10 text-center font-body text-sm text-muted-fg">
+      <span class="text-accent" aria-hidden="true">&gt;</span> pipeline complete —
+      全程无需人工干预 <span class="text-accent">✓</span>
+    </p>
+  </div>
+</section>

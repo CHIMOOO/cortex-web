@@ -1,0 +1,107 @@
+---
+import Icon from "./Icon.astro";
+
+const features = [
+  {
+    no: "02",
+    icon: "git-branch",
+    title: "部门订阅",
+    desc: "按部门（namespace）绑定身份，只接收自己部门的内容更新，互不干扰。",
+    tall: true,
+  },
+  {
+    no: "03",
+    icon: "rss",
+    title: "实时推送",
+    desc: "30 秒轮询通道，内容发布与新版本客户端第一时间送达通知。",
+  },
+  {
+    no: "04",
+    icon: "moon-star",
+    title: "静默常驻",
+    desc: "系统托盘常驻、开机自启，后台自动同步——存在感为零，同步不缺席。",
+  },
+  {
+    no: "05",
+    icon: "refresh-cw",
+    title: "自动更新",
+    desc: "内置 updater，管理端发布新版本后客户端直达安装，全员版本始终一致。",
+    tall: true,
+  },
+  {
+    no: "06",
+    icon: "sliders",
+    title: "集中管控",
+    desc: "管理端可远程开关客户端模块，策略变更实时下发，无需逐台配置。",
+  },
+];
+---
+
+<section
+  id="features"
+  class="scroll-mt-20 overflow-hidden py-24"
+  aria-labelledby="features-title"
+>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="max-w-2xl">
+      <span class="font-label text-xs uppercase tracking-[0.22em] text-accent"
+        >[ Modules // 02-06 ]</span
+      >
+      <h2
+        id="features-title"
+        class="mt-4 font-display text-4xl font-bold tracking-wide text-fg md:text-5xl"
+      >
+        模块矩阵
+      </h2>
+      <p class="mt-2 text-lg text-muted-fg">一个载体，装下团队需要的每个能力</p>
+    </div>
+
+    <div class="mt-12 -skew-y-1">
+      <div class="grid skew-y-1 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {
+          features.map((f) => (
+            <article
+              class:list={[
+                "card card-hover chamfer p-6",
+                f.tall && "lg:py-10",
+              ]}
+            >
+              <div class="flex items-start justify-between">
+                <span
+                  class="inline-flex h-11 w-11 items-center justify-center border border-accent/40 text-accent chamfer-sm [box-shadow:var(--shadow-neon-sm)]"
+                >
+                  <Icon name={f.icon} size={22} />
+                </span>
+                <span class="font-label text-sm text-faint">{f.no}</span>
+              </div>
+              <h3 class="mt-5 font-display text-xl font-semibold uppercase tracking-wide text-fg">
+                {f.title}
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted-fg">{f.desc}</p>
+            </article>
+          ))
+        }
+
+        <!-- 扩展占位卡（ghost，呼应「载体平台」可扩展定位） -->
+        <article
+          class="flex flex-col items-center justify-center border border-dashed border-border p-6 text-center chamfer"
+        >
+          <span
+            class="inline-flex h-11 w-11 items-center justify-center border border-dashed border-faint text-faint chamfer-sm"
+          >
+            <Icon name="plus" size={22} />
+          </span>
+          <div class="mt-4 font-label text-xs uppercase tracking-[0.2em] text-faint">
+            [ Slot // Next ]
+          </div>
+          <h3 class="mt-2 text-base font-semibold text-muted-fg caret">
+            更多模块，加载中
+          </h3>
+          <p class="mt-2 max-w-[16rem] text-xs leading-relaxed text-faint">
+            作为内部软件载体平台，AIoT Cortex 将持续承载新的团队能力模块。
+          </p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
