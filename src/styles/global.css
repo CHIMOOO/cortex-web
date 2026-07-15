@@ -289,47 +289,88 @@ summary:focus-visible,
   }
 }
 
-/* 大标题：多色渐变填充 + 霓虹辉光 + 轻微闪动（可读，无重影）
-   —— 参考 designprompts.dev/cyberpunk 的 Transform 标题效果。
-   仅用于主标题（AIOT CORTEX / 404），不施于按钮/菜单/正文数据，避免难以辨读。 */
+/* “Transform”式故障标题（忠实复刻 designprompts.dev/cyberpunk 的 .cyber-glitch）：
+   底字纯净、100% 可读；仅两个 data-text 副本被 clip-path 裁成不断跳动的横向切片，
+   带品红/青位移 —— 是「间歇的横向故障切片」，不是整行常驻重影。
+   仅用于主标题（需带 data-text 属性），不施于按钮/菜单/正文。 */
 .cyber-glitch {
-  background-image: linear-gradient(
-    100deg,
-    #00ff88 0%,
-    #eaeaea 34%,
-    #ff3df0 60%,
-    #b06bff 78%,
-    #00d4ff 100%
-  );
-  background-size: 220% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  position: relative;
+  color: var(--color-fg);
   filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5));
-  animation: titleFlow 9s linear infinite, titleFlicker 6s infinite;
 }
-/* 渐变缓慢流过文字（“活着”的感觉） */
-@keyframes titleFlow {
-  to {
-    background-position: 220% center;
+.cyber-glitch::before,
+.cyber-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg); /* 遮住底字，仅切片区域显示错位副本 */
+  pointer-events: none;
+}
+.cyber-glitch::before {
+  left: 2px;
+  text-shadow: -1px 0 var(--color-accent2); /* 品红 */
+  clip-path: inset(0);
+  animation: glitch-anim-1 2s linear infinite alternate-reverse;
+}
+.cyber-glitch::after {
+  left: -2px;
+  text-shadow: -1px 0 var(--color-accent3); /* 青 */
+  clip-path: inset(0);
+  animation: glitch-anim-2 3s linear infinite alternate-reverse;
+}
+@keyframes glitch-anim-1 {
+  0% {
+    clip-path: inset(20% 0 80%);
+    transform: translate(-2px, 1px);
   }
-}
-/* 霓虹灯般偶发闪动（轻，不刺眼） */
-@keyframes titleFlicker {
-  0%,
-  46%,
-  54%,
-  91%,
-  93%,
+  20% {
+    clip-path: inset(60% 0 10%);
+    transform: translate(2px, -1px);
+  }
+  40% {
+    clip-path: inset(40% 0 50%);
+    transform: translate(-2px, 2px);
+  }
+  60% {
+    clip-path: inset(80% 0 5%);
+    transform: translate(1px, -2px);
+  }
+  80% {
+    clip-path: inset(10% 0 70%);
+    transform: translate(-1px, 1px);
+  }
   100% {
-    opacity: 1;
+    clip-path: inset(30% 0 50%);
+    transform: translate(2px, -1px);
   }
-  50% {
-    opacity: 0.85;
+}
+@keyframes glitch-anim-2 {
+  0% {
+    clip-path: inset(10% 0 60%);
+    transform: translate(2px, -1px);
   }
-  92% {
-    opacity: 0.72;
+  20% {
+    clip-path: inset(80% 0 5%);
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    clip-path: inset(30% 0 20%);
+    transform: translate(1px, -2px);
+  }
+  60% {
+    clip-path: inset(10% 0 80%);
+    transform: translate(-1px, 1px);
+  }
+  80% {
+    clip-path: inset(50% 0 30%);
+    transform: translate(2px, -1px);
+  }
+  100% {
+    clip-path: inset(20% 0 70%);
+    transform: translate(-2px, 1px);
   }
 }
 .text-glow {
@@ -377,8 +418,10 @@ summary:focus-visible,
   html {
     scroll-behavior: auto;
   }
-  .cyber-glitch {
-    animation: none; /* 保留静态渐变填充 + 辉光，去掉流动/闪动 */
+  .cyber-glitch::before,
+  .cyber-glitch::after {
+    animation: none;
+    display: none; /* 关掉故障切片，只留纯净底字 + 辉光 */
   }
   .caret::after,
   .typing {
