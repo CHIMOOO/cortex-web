@@ -97,8 +97,8 @@ export const downloads: DownloadsConfig = {
       // 形态②（兜底）：把包丢进 public/downloads/ 后改成下面这行——
       // url: `/downloads/${WIN_SETUP}`,
       file: WIN_SETUP,
-      size: 5_567_651,
-      sha256: "236e94a9b39d3e6d254feebe51f3e7b2e0cd01f5aa59916f792bc731fe917292",
+      size: 5_568_234,
+      sha256: "bd388254b3244929ae8ed36312ccb62543bdda9af03435181281baae98f25f0b",
       available: true,
     },
     {
