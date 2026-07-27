@@ -72,7 +72,7 @@ export const hubUrl = (
 // 内网 admin 服务端（skillsHub-admin），与 deploy.env 的 SKILLSHUB_PUBLIC_URL 必须一致 ——
 // latest.json 里的下载地址由服务端按该值生成，两处不一致会出现「官网能下、客户端更新下不到」。
 const HUB_BASE = "http://192.168.75.203:41151";
-const VERSION = "1.0.1";
+const VERSION = "1.0.2";
 
 /**
  * Windows 安装包文件名 —— 必须与 Tauri NSIS 产物**逐字符一致**（含空格），
@@ -85,7 +85,7 @@ const WIN_SETUP = `AIoT Cortex_${VERSION}_x64-setup.exe`;
 
 export const downloads: DownloadsConfig = {
   version: VERSION,
-  releasedAt: "2026-07-27",
+  releasedAt: "2026-07-28",
   entries: [
     {
       platform: "windows-x86_64",
@@ -97,8 +97,8 @@ export const downloads: DownloadsConfig = {
       // 形态②（兜底）：把包丢进 public/downloads/ 后改成下面这行——
       // url: `/downloads/${WIN_SETUP}`,
       file: WIN_SETUP,
-      size: 5_568_234,
-      sha256: "bd388254b3244929ae8ed36312ccb62543bdda9af03435181281baae98f25f0b",
+      size: 5_566_394,
+      sha256: "37d54cd0ef8293010636940526850751ebc3ea7c29ead97370e4beda5f0b7628",
       available: true,
     },
     {
