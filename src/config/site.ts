@@ -7,7 +7,7 @@
 export const site = {
   /** 官网正式域名（无尾斜杠）。改这里后必须重新 `pnpm build`：canonical/sitemap/OG 都是构建期内联。
    *  当前为内网 IP 直连形态；日后若换 https 域名，注意同步 downloads.ts 的 HUB_BASE（协议必须一致）。 */
-  siteUrl: "http://192.168.75.203",
+  siteUrl: "http://192.168.75.203:41155",
   /** 软件/站点名（用于 title、OG、JSON-LD） */
   name: "AIoT Cortex",
   /** 大标题英文品牌词（拉丁 glitch 字体渲染） */

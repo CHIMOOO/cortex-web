@@ -72,7 +72,7 @@ export const hubUrl = (
 // 内网 admin 服务端（skillsHub-admin），与 deploy.env 的 SKILLSHUB_PUBLIC_URL 必须一致 ——
 // latest.json 里的下载地址由服务端按该值生成，两处不一致会出现「官网能下、客户端更新下不到」。
 const HUB_BASE = "http://192.168.75.203:41151";
-const VERSION = "1.0.0";
+const VERSION = "1.0.1";
 
 /**
  * Windows 安装包文件名 —— 必须与 Tauri NSIS 产物**逐字符一致**（含空格），
@@ -97,8 +97,8 @@ export const downloads: DownloadsConfig = {
       // 形态②（兜底）：把包丢进 public/downloads/ 后改成下面这行——
       // url: `/downloads/${WIN_SETUP}`,
       file: WIN_SETUP,
-      size: 39_224_775,
-      sha256: "5b2be7662627becd8ec5646827c2ed829345ae518733276ba69d38eea0b3fefa",
+      size: 5_567_651,
+      sha256: "236e94a9b39d3e6d254feebe51f3e7b2e0cd01f5aa59916f792bc731fe917292",
       available: true,
     },
     {
