@@ -113,5 +113,48 @@ const graph = [softwareLd, ...jsonLd];
   </head>
   <body>
     <slot />
+
+    <!--
+      宏观联动的唯一信号源：把归一化指针坐标写进 :root 的 --px/--py（见 global.css 顶部）。
+      全站只有这一个监听器、一条 rAF 链——网格、霓虹雾、卡片各自读同一对变量、按不同增益
+      漂移，所以不需要给每个元素挂事件。内联而非打包成模块：整站原本零 JS，
+      为几百字节再多一次网络往返不划算。
+    -->
+    <script is:inline>
+      (() => {
+        // 触屏/粗指针根本没有 hover 语义，降级动效偏好也一样——直接不装监听器，
+        // 而不是装了再在回调里判断（CSS 侧另有兜底，两头都不留活口）。
+        if (!matchMedia("(pointer: fine)").matches) return;
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+        const root = document.documentElement;
+        let tx = 0, ty = 0, x = 0, y = 0, raf = 0;
+
+        const tick = () => {
+          // 每帧只补 12% 的差值：指针停下后画面还会滑行几帧再停，
+          // 这点惯性就是「丝滑」的来源；直接赋值虽然跟手，但会硬得像鼠标拖着页面走。
+          x += (tx - x) * 0.12;
+          y += (ty - y) * 0.12;
+          root.style.setProperty("--px", x.toFixed(4));
+          root.style.setProperty("--py", y.toFixed(4));
+          // 收敛到亚像素级就停帧——指针静止时不留空转的 rAF，也就没有多余重绘。
+          raf =
+            Math.abs(tx - x) + Math.abs(ty - y) > 0.002
+              ? requestAnimationFrame(tick)
+              : 0;
+        };
+
+        addEventListener(
+          "pointermove",
+          (e) => {
+            // 只记录目标值，渲染交给 rAF：一帧内挪多少次鼠标都只写一次变量。
+            tx = (e.clientX / innerWidth) * 2 - 1;
+            ty = (e.clientY / innerHeight) * 2 - 1;
+            if (!raf) raf = requestAnimationFrame(tick);
+          },
+          { passive: true },
+        );
+      })();
+    </script>
   </body>
 </html>

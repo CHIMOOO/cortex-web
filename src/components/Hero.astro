@@ -1,7 +1,14 @@
 ---
 import { site } from "../config/site";
-import { downloads, primaryDownload } from "../config/downloads";
+import { downloads, primaryDownload, formatSize } from "../config/downloads";
 import Icon from "./Icon.astro";
+
+// 右栏信息卡的每一项都取自 downloads.ts（构建期内联）——版本、文件名、体积、校验值
+// 全都能对着安装包验回来。这里不放任何估算值或占位数字：Hero 是全站可信度的第一印象，
+// 摆一个用户验不了的数比留白更伤。
+const size = formatSize(primaryDownload.size);
+// 三个真实落盘目录，与 SkillsSync / Pipeline 的说法保持同一套事实
+const targets = ["~/.claude", "~/.codex", "~/.cursor"];
 ---
 
 <section
@@ -55,46 +62,83 @@ import Icon from "./Icon.astro";
       </p>
     </div>
 
-    <!-- 右 40%：HUD 同步监视器（lg 以下隐藏） -->
+    <!-- 右 40%：本次发布信息卡（lg 以下隐藏，沿用 HUD 的全息底座与四角）。
+         不加 aria-hidden —— 面板里的 SHA-256 是全站唯一一处完整校验值，
+         对读屏隐藏等于把可验证信息藏起来，比重复播报更亏。 -->
     <div class="hidden lg:col-span-2 lg:block">
-      <div class="holo holo-corner chamfer p-6" aria-hidden="true">
+      <div class="holo holo-corner chamfer p-6">
         <div
           class="flex items-center justify-between border-b border-accent/20 pb-3 font-label text-xs tracking-[0.15em] text-accent"
         >
-          <span>同步监视器</span>
-          <span class="flex items-center gap-1.5 text-accent">
-            <span class="inline-block h-2 w-2 rounded-full bg-accent [box-shadow:0_0_6px_#00ff88]"></span>
-            在线
-          </span>
+          <span>本次发布</span>
+          <span class="text-accent3">v{downloads.version}</span>
         </div>
 
         <dl class="mt-4 space-y-3 font-body text-sm">
-          <div class="flex items-center justify-between">
-            <dt class="text-faint">部门</dt>
-            <dd class="text-fg">rd-platform</dd>
+          <div class="flex items-center justify-between gap-4">
+            <dt class="shrink-0 text-muted-fg">平台</dt>
+            <dd class="text-right text-fg">
+              {primaryDownload.label} · {primaryDownload.arch}
+            </dd>
           </div>
-          <div class="flex items-center justify-between">
-            <dt class="text-faint">已同步技能</dt>
-            <dd class="text-accent3">42</dd>
-          </div>
-          <div class="flex items-center justify-between">
-            <dt class="text-faint">同步目标</dt>
-            <dd class="text-fg">claude / codex / cursor</dd>
-          </div>
-          <div class="flex items-center justify-between">
-            <dt class="text-faint">下次轮询</dt>
-            <dd class="text-fg">00:00:27</dd>
+          {
+            downloads.releasedAt && (
+              <div class="flex items-center justify-between gap-4">
+                <dt class="shrink-0 text-muted-fg">发布日期</dt>
+                <dd class="text-fg">{downloads.releasedAt}</dd>
+              </div>
+            )
+          }
+          {
+            size && (
+              <div class="flex items-center justify-between gap-4">
+                <dt class="shrink-0 text-muted-fg">安装包体积</dt>
+                <dd class="text-fg">{size}</dd>
+              </div>
+            )
+          }
+          <div>
+            <dt class="text-muted-fg">文件名</dt>
+            <dd class="mt-1 break-all text-[0.72rem] leading-relaxed text-accent3">
+              {primaryDownload.file}
+            </dd>
           </div>
         </dl>
 
-        <div
-          class="mt-5 border-t border-accent/20 pt-3 font-body text-xs text-muted-fg"
-        >
-          <span class="text-accent">&gt;</span> 接收技能清单 …
-          <span class="text-accent">完成</span>
+        {
+          primaryDownload.sha256 && (
+            <div class="mt-4 border-t border-accent/20 pt-3">
+              <dl>
+                <dt class="font-label text-[0.65rem] tracking-[0.15em] text-muted-fg">
+                  SHA-256
+                </dt>
+                <dd class="mt-1 break-all text-[0.68rem] leading-[1.55] text-muted-fg">
+                  {primaryDownload.sha256}
+                </dd>
+              </dl>
+            </div>
+          )
+        }
+
+        <div class="mt-4 border-t border-accent/20 pt-3">
+          <div class="font-label text-[0.65rem] tracking-[0.15em] text-muted-fg">
+            同步落盘目录
+          </div>
+          <ul class="mt-2 flex flex-wrap gap-2">
+            {
+              targets.map((t) => (
+                <li class="chamfer-sm border border-accent/25 px-2 py-1 text-[0.7rem] text-accent3">
+                  {t}
+                </li>
+              ))
+            }
+          </ul>
         </div>
-        <p class="mt-2 font-label text-[0.6rem] tracking-widest text-faint">
-          * 示意数据
+
+        <p
+          class="mt-4 border-t border-accent/20 pt-3 font-body text-xs leading-relaxed text-muted-fg"
+        >
+          <span class="text-accent" aria-hidden="true">&gt;</span> 受管块写入，手写内容零覆盖
         </p>
       </div>
     </div>

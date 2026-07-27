@@ -6,15 +6,18 @@ const points = [
   { k: "三大工具一次覆盖", v: "~/.claude、~/.codex、~/.cursor 同步落盘" },
 ];
 
+// 同步流程示意。部门名与技能数写成 <尖括号占位符>，不摆具体数字——
+// 编造的「42 项技能 / 1.2s」用户既验不了也没法参照，占位符反而一眼看出是模板。
+// 这里出现的目录与 30s 轮询间隔是产品真实行为，可以照写。
 const term = [
   { p: "$", t: "开始同步", c: "cmd" },
-  { p: ">", t: "拉取部门订阅 [rd-platform] …… 完成", c: "ok" },
-  { p: ">", t: "清单比对：42 项技能，3 项有更新", c: "" },
+  { p: ">", t: "拉取部门订阅 [<你的部门>] …… 完成", c: "ok" },
+  { p: ">", t: "清单比对：本次有更新的技能已列出", c: "" },
   { p: ">", t: "写入 ~/.claude/skills …… 完成", c: "ok" },
   { p: ">", t: "写入 ~/.codex/skills …… 完成", c: "ok" },
   { p: ">", t: "写入 ~/.cursor/skills …… 完成", c: "ok" },
   { p: ">", t: "手写内容检测：0 处覆盖 ✓", c: "ok" },
-  { p: ">", t: "同步完成（1.2s）— 下次轮询 30s 后", c: "cursor" },
+  { p: ">", t: "同步完成 — 下次轮询 30s 后", c: "cursor" },
 ];
 ---
 
@@ -67,8 +70,9 @@ const term = [
 
     <!-- 右 60% 终端卡 -->
     <div class="lg:col-span-3">
+      <!-- drift：终端卡漂移、左侧文案不动，两栏之间的速度差就是这一屏的景深 -->
       <div
-        class="relative border border-border bg-bg chamfer [box-shadow:var(--shadow-neon-sm)]"
+        class="relative border border-border bg-bg chamfer drift [box-shadow:var(--shadow-neon-sm)]"
       >
         <!-- 交通灯头 -->
         <div class="term-dots relative h-10 border-b border-border">

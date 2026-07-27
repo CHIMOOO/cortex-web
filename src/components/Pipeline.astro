@@ -43,9 +43,10 @@ const steps = [
     </div>
 
     <div class="relative mt-16 rotate-[-0.5deg]">
-      <!-- 贯穿三卡的发光虚线（桌面横向） -->
+      <!-- 贯穿三卡的发光虚线（桌面横向）；drift 让它与三张 .holo 卡同速漂移，
+           否则卡片动、连线不动，穿线关系会脱开 -->
       <div
-        class="pointer-events-none absolute left-0 right-0 top-[3.25rem] hidden h-px dash-flow md:block"
+        class="pointer-events-none absolute left-0 right-0 top-[3.25rem] hidden h-px dash-flow drift md:block"
         aria-hidden="true"
       >
       </div>

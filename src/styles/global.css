@@ -34,6 +34,29 @@
   --shadow-neon-tertiary: 0 0 5px #00d4ff, 0 0 20px #00d4ff60;
 }
 
+/* ───────────────────── 宏观联动：全场共用的指针信号 ─────────────────────
+   Base.astro 末尾那段内联 JS 把归一化指针坐标（-1..1，阻尼跟随）写到这两个变量上。
+   下游所有层读的都是**同一对值**，区别只在增益：网格最慢 → 卡片居中 → 霓虹雾最快。
+   所以指针一动，整页各层同向不同速地漂移，看起来是一整块场景在动，
+   而不是每个卡片各自绑一套 hover——「宏观联动」就是靠这两个变量串起来的。
+
+   兜底：触屏与 prefers-reduced-motion 下 JS 根本不启动，两值恒为 0，
+   所有 calc() 结果归零，页面退回完全静态。 */
+:root {
+  --px: 0;
+  --py: 0;
+}
+
+/* 没走 .card / .holo 的容器（指标带、终端卡、问答项、连接线、水印）挂这两个类接入同一信号，
+   否则整页漂移时它们会成为一格格钉死的死点，「一起动」的错觉立刻破功 */
+.drift {
+  translate: calc(var(--px) * 4px) calc(var(--py) * 3px);
+}
+/* 纯装饰的前景层，跟手更明显一档，用来垫出与主体的景深差 */
+.drift-lead {
+  translate: calc(var(--px) * 12px) calc(var(--py) * 8px);
+}
+
 /* ───────────────────────── 基础 ───────────────────────── */
 html {
   color-scheme: dark;
@@ -99,11 +122,15 @@ summary:focus-visible,
   background-image: linear-gradient(rgba(0, 255, 136, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 255, 136, 0.035) 1px, transparent 1px);
   background-size: 50px 50px;
+  /* 景深最远的一层，增益最小：网格是周期性的，静止时挪 3px 肉眼读不出差别，
+     只有跟着指针连续位移时才被感知成「远处的地板在滑」。只改 background-position，不触发布局。 */
+  background-position: calc(var(--px) * 3px) calc(var(--py) * 3px);
 }
 .grid-bg-strong {
   background-image: linear-gradient(rgba(0, 255, 136, 0.07) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 255, 136, 0.07) 1px, transparent 1px);
   background-size: 46px 46px;
+  background-position: calc(var(--px) * 4px) calc(var(--py) * 4px);
 }
 /* 角落霓虹雾（不对称光源） */
 .mesh {
@@ -114,6 +141,11 @@ summary:focus-visible,
     ),
     radial-gradient(50% 50% at 100% 20%, rgba(255, 0, 255, 0.1), transparent 70%),
     radial-gradient(60% 60% at 90% 100%, rgba(0, 212, 255, 0.08), transparent 70%);
+  /* 全场增益最大的一层——光团是「灯」，跟手最明显，整页的活气主要由它提供。
+     scale 略微放大是为了位移后不把容器边缘的透明区露出来（纯合成，不动布局）。 */
+  translate: calc(var(--px) * 20px) calc(var(--py) * 14px);
+  scale: 1.08;
+  will-change: transform; /* 只给这三块大面积渐变提层，卡片不提，避免图层膨胀 */
 }
 
 /* ───────────────────────── 切角（chamfer）───────────────────────── */
@@ -157,15 +189,39 @@ summary:focus-visible,
 /* ───────────────────────── 组件基元 ───────────────────────── */
 /* 默认卡片 */
 .card {
+  position: relative; /* 承载下面的悬停高光层 */
   background: var(--color-card);
   border: 1px solid var(--color-border);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     border-color 0.3s, box-shadow 0.3s;
+  /* 宏观漂移刻意走独立的 translate 属性，而不是挤进 transform：
+     这样与 .card-hover:hover 的 translateY 天然叠加，互不覆盖，
+     也不会被上面那条 0.3s transform 过渡再拖一次（JS 侧已经做过阻尼，二次缓动会发糊）。 */
+  translate: calc(var(--px) * 4px) calc(var(--py) * 3px);
 }
 .card-hover:hover {
   transform: translateY(-2px);
   border-color: var(--color-accent);
   box-shadow: var(--shadow-neon);
+}
+/* 悬停高光：光斑落点同样由全局 --px/--py 决定，而不是这张卡自己测的局部坐标。
+   于是它读起来是「场景里那盏灯正好扫到这张卡」——局部反馈叠在宏观漂移之上，
+   而不是各写各的。alpha 只有 6%，且仅悬停时出现，静止截图上不存在。 */
+.card-hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background: radial-gradient(
+    18rem 18rem at calc(50% + var(--px) * 45%) calc(50% + var(--py) * 45%),
+    rgba(0, 255, 136, 0.06),
+    transparent 65%
+  );
+}
+.card-hover:hover::after {
+  opacity: 1;
 }
 /* 全息卡（毛玻璃 + 霓虹边 + 四角） */
 .holo {
@@ -174,6 +230,7 @@ summary:focus-visible,
   border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
   box-shadow: var(--shadow-neon);
   backdrop-filter: blur(8px);
+  translate: calc(var(--px) * 4px) calc(var(--py) * 3px); /* 与 .card 同速，成组漂移 */
 }
 .holo-corner::before,
 .holo-corner::after {
@@ -430,6 +487,30 @@ summary:focus-visible,
   .typing {
     width: 100%;
     border-right-color: transparent;
+  }
+  /* 宏观联动整套下线：!important 保证盖过 JS 写在 <html> 上的行内值
+     （若用户是会话中途才打开系统降级开关，JS 已经启动，这里仍能把它按住）。 */
+  :root {
+    --px: 0 !important;
+    --py: 0 !important;
+  }
+  .grid-bg,
+  .grid-bg-strong {
+    background-position: 0 0;
+  }
+  .mesh,
+  .card,
+  .holo,
+  .drift,
+  .drift-lead {
+    translate: none;
+  }
+  .mesh {
+    scale: none;
+    will-change: auto;
+  }
+  .card-hover::after {
+    display: none;
   }
   *,
   *::before,

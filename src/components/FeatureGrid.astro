@@ -82,9 +82,10 @@ const features = [
           ))
         }
 
-        <!-- 扩展占位卡（ghost，呼应「载体平台」可扩展定位） -->
+        <!-- 扩展占位卡（ghost，呼应「载体平台」可扩展定位）；
+             drift 补上宏观漂移——它不是 .card，不接进去就会成为同一格网里唯一钉死的一张 -->
         <article
-          class="flex flex-col items-center justify-center border border-dashed border-border p-6 text-center chamfer"
+          class="flex flex-col items-center justify-center border border-dashed border-border p-6 text-center chamfer drift"
         >
           <span
             class="inline-flex h-11 w-11 items-center justify-center border border-dashed border-faint text-faint chamfer-sm"

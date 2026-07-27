@@ -22,7 +22,9 @@ import Icon from "./Icon.astro";
     <div class="mt-12 space-y-4">
       {
         faqItems.map((it) => (
-          <details class="group relative border border-border bg-card chamfer">
+          <!-- drift：问答区没有网格/霓虹雾可跟，不接信号整屏会彻底死掉；
+               4px 的量级不足以影响阅读，只在指针移动时被感知 -->
+          <details class="group relative border border-border bg-card chamfer drift">
             <summary
               class="flex cursor-pointer list-none items-center gap-3 px-5 py-4 pt-6 font-body text-base text-fg transition hover:text-accent"
             >
