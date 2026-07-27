@@ -69,12 +69,23 @@ export const hubUrl = (
   `${base}/updates/download/${version}/${platform}/${encodeURIComponent(file)}`;
 
 // ── hub 基址：跨域托管形态下改这里；同域形态下忽略（entry.url 直接写 /downloads/…）──
-const HUB_BASE = "https://hub.example.com"; // TODO: 换成真实内部服务器地址
-const VERSION = "0.5.0";
+// 内网 admin 服务端（skillsHub-admin），与 deploy.env 的 SKILLSHUB_PUBLIC_URL 必须一致 ——
+// latest.json 里的下载地址由服务端按该值生成，两处不一致会出现「官网能下、客户端更新下不到」。
+const HUB_BASE = "http://192.168.75.203:41151";
+const VERSION = "1.0.0";
+
+/**
+ * Windows 安装包文件名 —— 必须与 Tauri NSIS 产物**逐字符一致**（含空格），
+ * 因为 url 里的文件名就是服务端 data/updates/<version>/<platform>/ 下的真实文件名。
+ * 命名规则 `{productName}_{version}_{arch}-setup.exe`，productName 取自桌面端
+ * deploy/preset.json 的 appName（「AIoT Cortex」，中间是**空格不是连字符**）。
+ * hubUrl() 内部对文件名做 encodeURIComponent，空格会编码成 %20，无需在此预编码。
+ */
+const WIN_SETUP = `AIoT Cortex_${VERSION}_x64-setup.exe`;
 
 export const downloads: DownloadsConfig = {
   version: VERSION,
-  releasedAt: "2026-07-15",
+  releasedAt: "2026-07-27",
   entries: [
     {
       platform: "windows-x86_64",
@@ -82,10 +93,12 @@ export const downloads: DownloadsConfig = {
       label: "Windows 10/11",
       arch: "x86_64",
       // 形态①（默认）：跨域 hub 托管
-      url: hubUrl(HUB_BASE, VERSION, "windows-x86_64", `AIoT-Cortex_${VERSION}_x64-setup.exe`),
+      url: hubUrl(HUB_BASE, VERSION, "windows-x86_64", WIN_SETUP),
       // 形态②（兜底）：把包丢进 public/downloads/ 后改成下面这行——
-      // url: `/downloads/AIoT-Cortex_${VERSION}_x64-setup.exe`,
-      file: `AIoT-Cortex_${VERSION}_x64-setup.exe`,
+      // url: `/downloads/${WIN_SETUP}`,
+      file: WIN_SETUP,
+      size: 39_224_775,
+      sha256: "5b2be7662627becd8ec5646827c2ed829345ae518733276ba69d38eea0b3fefa",
       available: true,
     },
     {

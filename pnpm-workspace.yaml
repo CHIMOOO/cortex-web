@@ -1,0 +1,7 @@
+# pnpm 默认不跑依赖的安装脚本（供应链防护），被挡住的包会让 `pnpm build` 直接以
+# ERR_PNPM_IGNORED_BUILDS 退出。这两个必须放行：
+#   esbuild —— Vite/Astro 的打包器，安装脚本负责就位平台原生二进制
+#   sharp   —— Astro 图片优化服务的底层，缺原生模块则构建期报错
+allowBuilds:
+  esbuild: true
+  sharp: true

@@ -5,8 +5,9 @@
 //    此时请改用「同域分发形态」——见 src/config/downloads.ts 顶部说明。
 
 export const site = {
-  /** 官网正式域名（无尾斜杠）。TODO: 上线前替换为真实域名后重建。 */
-  siteUrl: "https://cortex.example.com",
+  /** 官网正式域名（无尾斜杠）。改这里后必须重新 `pnpm build`：canonical/sitemap/OG 都是构建期内联。
+   *  当前为内网 IP 直连形态；日后若换 https 域名，注意同步 downloads.ts 的 HUB_BASE（协议必须一致）。 */
+  siteUrl: "http://192.168.75.203",
   /** 软件/站点名（用于 title、OG、JSON-LD） */
   name: "AIoT Cortex",
   /** 大标题英文品牌词（拉丁 glitch 字体渲染） */
